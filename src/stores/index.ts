@@ -1,1 +1,1 @@
-export { default as MarketStore } from './marketStore';
+export { default as MarketHubStore } from './marketHubStore';

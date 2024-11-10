@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { MarketData } from "../stores/marketStore";
+import { MarketHubData } from "../stores/marketHubStore";
 import { SettingsStore } from "../stores/settingsStore";
 
 interface MarketProps {
-  marketData: MarketData | null;
+  marketData: MarketHubData | null;
 }
 
 // Move getInstance() calls outside the hook to avoid redundant calls
