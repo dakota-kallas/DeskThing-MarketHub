@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import { MarketHubData } from '../stores/marketHubStore';
+import { StockData } from '../stores/marketHubStore';
 import { SettingsStore } from '../stores/settingsStore';
 
-interface MarketHubProps {
-  marketHubData: MarketHubData | null;
+interface StockProps {
+  stockData: StockData | null;
 }
 
 // Move getInstance() calls outside the hook to avoid redundant calls
 const settingsStore = SettingsStore.getInstance();
 
-const Simple = ({ marketHubData }: MarketHubProps) => {
+const Simple = ({ stockData }: StockProps) => {
   // Initial time fetched from SettingsStore
   const [time, setTime] = useState(() => {
     return settingsStore.getTime().trim();
@@ -30,18 +30,16 @@ const Simple = ({ marketHubData }: MarketHubProps) => {
   }, []);
 
   const changeClass =
-    marketHubData?.stock1 && marketHubData.stock1.change > 0
-      ? 'text-green-500'
-      : 'text-red-500';
+    stockData && stockData.change > 0 ? 'text-green-500' : 'text-red-500';
 
   return (
     <div className='stockContainer'>
       <div>
-        <p>{marketHubData?.stock1?.code}</p>
+        <p>{stockData?.code}</p>
       </div>
       <div>
-        <p>{marketHubData?.stock1?.current}</p>
-        <p className={changeClass}>{marketHubData?.stock1?.change}</p>
+        <p>{stockData?.current}</p>
+        <p className={changeClass}>{stockData?.change}</p>
       </div>
     </div>
   );

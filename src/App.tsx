@@ -28,7 +28,11 @@ const App: React.FC = () => {
 
   return (
     <div className='appContainer w-screen h-screen'>
-      <Stock marketHubData={marketHubData} />
+      {marketHubData?.stock1 ? (
+        <Stock stockData={marketHubData.stock1} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
