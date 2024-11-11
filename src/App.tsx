@@ -28,11 +28,33 @@ const App: React.FC = () => {
 
   return (
     <div className='appContainer w-screen h-screen'>
-      {marketHubData?.stock1 ? (
-        <Stock stockData={marketHubData.stock1} />
-      ) : (
-        <></>
-      )}
+      <div className='stocksContainer'>
+        {marketHubData?.stock1 ? (
+          <Stock stockData={marketHubData.stock1} />
+        ) : (
+          <></>
+        )}
+        {marketHubData?.stock2 ? (
+          <Stock stockData={marketHubData.stock2} />
+        ) : (
+          <></>
+        )}
+        {marketHubData?.stock3 ? (
+          <Stock stockData={marketHubData.stock3} />
+        ) : (
+          <></>
+        )}
+        {marketHubData?.stock1 ? (
+          <Stock stockData={marketHubData.stock1} />
+        ) : (
+          <></>
+        )}
+        {marketHubData?.stock1 ? (
+          <Stock stockData={marketHubData.stock1} />
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 };

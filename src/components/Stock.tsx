@@ -35,7 +35,8 @@ const Simple = ({ stockData }: StockProps) => {
   return (
     <div className='stockContainer'>
       <div>
-        <p>{stockData?.code}</p>
+        <p className='stockCode'>{stockData?.code}</p>
+        <p className='stockDescription'>{stockData?.description}</p>
       </div>
       <div>
         <p>{stockData?.current}</p>

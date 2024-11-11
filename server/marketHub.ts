@@ -104,11 +104,16 @@ class MarketHubService {
         `Market Hub data received from Finnhub API for ${stockCode}.`
       );
 
+      const change =
+        response.data.c && response.data.c > 0
+          ? '+' + response.data.c
+          : response.data.c;
+
       const stockData = {
         code: stockCode,
         description: lookupResponse.data.result[0].description,
         current: response.data.c,
-        change: response.data.d,
+        change,
         percentChange: response.data.dp,
         high: response.data.h,
         low: response.data.l,
