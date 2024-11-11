@@ -3,33 +3,51 @@ import { SocketData } from 'deskthing-server';
 
 export type MarketHubData = {
   /**
+   * Stock #1
+   */
+  stock1?: StockData;
+  /**
+   * Stock #2
+   */
+  stock2?: StockData;
+  /**
+   * Stock #3
+   */
+  stock3?: StockData;
+};
+export type StockData = {
+  /**
+   * Code
+   */
+  code: string;
+  /**
    * Current price
    */
-  c?: number;
+  current: number;
   /**
    * Change
    */
-  d?: number;
+  change: number;
   /**
    * Percent change
    */
-  dp?: number;
+  percentChange: number;
   /**
    * High price of the day
    */
-  h?: number;
+  high: number;
   /**
    * Low price of the day
    */
-  l?: number;
+  low: number;
   /**
    * Opening price
    */
-  o?: number;
+  opening: number;
   /**
    * Previous close price
    */
-  pc?: number;
+  previousClose: number;
 };
 type MarketHubListener = (marketHubData: MarketHubData | null) => void;
 

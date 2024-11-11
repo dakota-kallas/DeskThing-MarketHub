@@ -6,7 +6,7 @@
   "isLocalApp": false,
   "requires": [],
   "label": "Market Hub",
-  "version": "0.9.1",
+  "version": "0.1.0",
   "version_code": "1.0",
   "compatible_server": ["9"],
   "compatible_client": ["9"],

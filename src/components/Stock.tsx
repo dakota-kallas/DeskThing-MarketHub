@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
-import { MarketHubData } from "../stores/marketHubStore";
-import { SettingsStore } from "../stores/settingsStore";
+import { useEffect, useState } from 'react';
+import { MarketHubData } from '../stores/marketHubStore';
+import { SettingsStore } from '../stores/settingsStore';
 
-interface MarketProps {
-  marketData: MarketHubData | null;
+interface MarketHubProps {
+  marketHubData: MarketHubData | null;
 }
 
 // Move getInstance() calls outside the hook to avoid redundant calls
 const settingsStore = SettingsStore.getInstance();
 
-const Simple = ({ marketData }: MarketProps) => {
+const Simple = ({ marketHubData }: MarketHubProps) => {
   // Initial time fetched from SettingsStore
   const [time, setTime] = useState(() => {
     return settingsStore.getTime().trim();
@@ -30,11 +30,14 @@ const Simple = ({ marketData }: MarketProps) => {
   }, []);
 
   return (
-    <div>
-      <h1>{time}</h1>
-      <p>{marketData?.c}</p>
-      <p>{marketData?.h}</p>
-      <p>{marketData?.l}</p>
+    <div className='stockContainer'>
+      <div>
+        <p>{marketHubData?.stock1?.code}</p>
+      </div>
+      <div>
+        <p>{marketHubData?.stock1?.current}</p>
+        <p>{marketHubData?.stock1?.change}</p>
+      </div>
     </div>
   );
 };

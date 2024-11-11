@@ -27,8 +27,8 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className='bg-slate-800 w-screen h-screen flex justify-center items-center'>
-      <Stock marketData={marketHubData}/>
+    <div className='background w-screen h-screen flex justify-center items-center'>
+      <Stock marketHubData={marketHubData} />
     </div>
   );
 };

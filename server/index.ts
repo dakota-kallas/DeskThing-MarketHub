@@ -16,7 +16,11 @@ const start = async () => {
   });
 
   // This is how to add settings (implementation may vary)
-  if (!Data?.settings?.stockCode) {
+  if (
+    !Data?.settings?.stockCode1 ||
+    !Data?.settings?.stockCode2 ||
+    !Data?.settings?.stockCode3
+  ) {
     setupSettings();
   }
 
@@ -43,14 +47,28 @@ const start = async () => {
 };
 
 const setupSettings = async () => {
-  const stockCodeSetting = {
+  const stockCode1Setting = {
     label: 'Stock Code',
-    description: 'The stock code you want to track.',
+    description: 'The 1st stock code you want to track.',
+    type: 'string',
+  } as SettingsString;
+
+  const stockCode2Setting = {
+    label: 'Stock Code',
+    description: 'The 2nd stock code you want to track.',
+    type: 'string',
+  } as SettingsString;
+
+  const stockCode3Setting = {
+    label: 'Stock Code',
+    description: 'The 3rd stock code you want to track.',
     type: 'string',
   } as SettingsString;
 
   DeskThing.addSettings({
-    stockCode: stockCodeSetting,
+    stockCode1: stockCode1Setting,
+    stockCode2: stockCode2Setting,
+    stockCode3: stockCode3Setting,
   });
 };
 
