@@ -13,6 +13,16 @@ class MarketHubService {
   private stockCode1: string = '';
   private stockCode2: string = '';
   private stockCode3: string = '';
+  private stockCode4: string = '';
+  private stockCode5: string = '';
+  private stockCode6: string = '';
+  private stockCode7: string = '';
+  private stockCode8: string = '';
+  private stockCode9: string = '';
+  private stockCode10: string = '';
+  private stockCode11: string = '';
+  private stockCode12: string = '';
+  private count = 0;
 
   constructor() {
     this.deskthing = DeskThing;
@@ -42,11 +52,46 @@ class MarketHubService {
     this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
     this.marketHubData = {} as MarketHubData;
 
-    this.marketHubData.stock1 = await this.fetchStockData(this.stockCode1);
-    this.marketHubData.stock2 = await this.fetchStockData(this.stockCode2);
-    this.marketHubData.stock3 = await this.fetchStockData(this.stockCode3);
+    if (this.stockCode1 && this.stockCode1.length > 0) {
+      this.marketHubData.stock1 = await this.fetchStockData(this.stockCode1);
+    }
+    if (this.stockCode2 && this.stockCode2.length > 0) {
+      this.marketHubData.stock2 = await this.fetchStockData(this.stockCode2);
+    }
+    if (this.stockCode3 && this.stockCode3.length > 0) {
+      this.marketHubData.stock3 = await this.fetchStockData(this.stockCode3);
+    }
+    if (this.stockCode4 && this.stockCode4.length > 0) {
+      this.marketHubData.stock4 = await this.fetchStockData(this.stockCode4);
+    }
+    if (this.stockCode5 && this.stockCode5.length > 0) {
+      this.marketHubData.stock5 = await this.fetchStockData(this.stockCode5);
+    }
+    if (this.stockCode6 && this.stockCode6.length > 0) {
+      this.marketHubData.stock6 = await this.fetchStockData(this.stockCode6);
+    }
+    if (this.stockCode7 && this.stockCode7.length > 0) {
+      this.marketHubData.stock7 = await this.fetchStockData(this.stockCode7);
+    }
+    if (this.stockCode8 && this.stockCode8.length > 0) {
+      this.marketHubData.stock8 = await this.fetchStockData(this.stockCode8);
+    }
+    if (this.stockCode9 && this.stockCode9.length > 0) {
+      this.marketHubData.stock9 = await this.fetchStockData(this.stockCode9);
+    }
+    if (this.stockCode10 && this.stockCode10.length > 0) {
+      this.marketHubData.stock10 = await this.fetchStockData(this.stockCode10);
+    }
+    if (this.stockCode11 && this.stockCode11.length > 0) {
+      this.marketHubData.stock11 = await this.fetchStockData(this.stockCode11);
+    }
+    if (this.stockCode12 && this.stockCode12.length > 0) {
+      this.marketHubData.stock12 = await this.fetchStockData(this.stockCode12);
+    }
 
     this.lastUpdateTime = new Date();
+    this.marketHubData.lastUpdated = this.lastUpdateTime;
+    this.marketHubData.count = this.count;
 
     this.deskthing.sendLog(`Market Hub updated`);
     this.deskthing.sendDataToClient({
@@ -80,6 +125,15 @@ class MarketHubService {
       this.stockCode1 = (data.settings.stockCode1.value as string) || '';
       this.stockCode2 = (data.settings.stockCode2.value as string) || '';
       this.stockCode3 = (data.settings.stockCode3.value as string) || '';
+      this.stockCode4 = (data.settings.stockCode4.value as string) || '';
+      this.stockCode5 = (data.settings.stockCode5.value as string) || '';
+      this.stockCode6 = (data.settings.stockCode6.value as string) || '';
+      this.stockCode7 = (data.settings.stockCode7.value as string) || '';
+      this.stockCode8 = (data.settings.stockCode8.value as string) || '';
+      this.stockCode9 = (data.settings.stockCode9.value as string) || '';
+      this.stockCode10 = (data.settings.stockCode10.value as string) || '';
+      this.stockCode11 = (data.settings.stockCode11.value as string) || '';
+      this.stockCode12 = (data.settings.stockCode12.value as string) || '';
       console.log('Updated Market Hub data');
       this.updateMarketHub();
     } catch (error) {
@@ -120,6 +174,8 @@ class MarketHubService {
         opening: response.data.o,
         previousClose: response.data.pc,
       } as StockData;
+
+      this.count++;
 
       return stockData;
     }

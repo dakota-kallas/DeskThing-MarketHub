@@ -14,6 +14,50 @@ export type MarketHubData = {
    * Stock #3
    */
   stock3?: StockData;
+  /**
+   * Stock #4
+   */
+  stock4?: StockData;
+  /**
+   * Stock #5
+   */
+  stock5?: StockData;
+  /**
+   * Stock #6
+   */
+  stock6?: StockData;
+  /**
+   * Stock #7
+   */
+  stock7?: StockData;
+  /**
+   * Stock #8
+   */
+  stock8?: StockData;
+  /**
+   * Stock #9
+   */
+  stock9?: StockData;
+  /**
+   * Stock #10
+   */
+  stock10?: StockData;
+  /**
+   * Stock #11
+   */
+  stock11?: StockData;
+  /**
+   * Stock #12
+   */
+  stock12?: StockData;
+  /**
+   * Number of Stocks configured in the Market Hub
+   */
+  count: number;
+  /**
+   * Last Refreshed Time
+   */
+  lastUpdated?: Date;
 };
 export type StockData = {
   /**

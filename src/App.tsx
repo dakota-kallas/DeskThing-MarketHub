@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { MarketHubStore } from './stores';
 import { MarketHubData } from './stores/marketHubStore';
-import Stock from './components/Stock';
+import Header from './components/Header/Header';
+import Stocks from './components/Stocks/Stocks';
 
 const App: React.FC = () => {
   const marketHubStore = MarketHubStore;
@@ -28,33 +29,8 @@ const App: React.FC = () => {
 
   return (
     <div className='appContainer w-screen h-screen'>
-      <div className='stocksContainer'>
-        {marketHubData?.stock1 ? (
-          <Stock stockData={marketHubData.stock1} />
-        ) : (
-          <></>
-        )}
-        {marketHubData?.stock2 ? (
-          <Stock stockData={marketHubData.stock2} />
-        ) : (
-          <></>
-        )}
-        {marketHubData?.stock3 ? (
-          <Stock stockData={marketHubData.stock3} />
-        ) : (
-          <></>
-        )}
-        {marketHubData?.stock1 ? (
-          <Stock stockData={marketHubData.stock1} />
-        ) : (
-          <></>
-        )}
-        {marketHubData?.stock1 ? (
-          <Stock stockData={marketHubData.stock1} />
-        ) : (
-          <></>
-        )}
-      </div>
+      <Header lastUpdated={marketHubData?.lastUpdated} />
+      <Stocks marketHubData={marketHubData} />
     </div>
   );
 };

@@ -30,36 +30,5 @@ button:active {
 
 .appContainer {
   background-color: var(--surface-300);
-  padding: 16px;
   overflow: hidden;
-}
-
-.stocksContainer {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  grid-auto-rows: min-content;
-  gap: 16px;
-  height: 100%; /* Ensures the grid spans the container's height */
-  width: 70%;
-}
-
-.stockContainer {
-  width: 240px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: var(--surface-100);
-  color: var(--text);
-  padding: 8px;
-  border-radius: 8px;
-}
-
-.stockCode {
-  font-weight: bold;
-}
-
-.stockDescription {
-  font-size: 12px;
-  text-overflow: ellipsis;
-  color: var(--sub-text);
 }

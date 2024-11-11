@@ -1,0 +1,16 @@
+.contentContainer {
+  display: flex;
+  justify-content: center;
+  height: calc(100% - 32px);
+}
+
+.stocksContainer {
+  padding: 16px;
+  min-width: 784px; /* Minimum width of 3 columns worth of stocks */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-content: flex-start;
+  overflow-y: auto;
+}
