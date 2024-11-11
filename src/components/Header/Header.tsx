@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { SettingsStore } from '../../stores/settingsStore';
 import './header.css';
+import { formatTimeDifference } from '../../utilities/date';
 
 // Move getInstance() calls outside the hook to avoid redundant calls
 const settingsStore = SettingsStore.getInstance();
@@ -42,44 +43,18 @@ const Header = ({ lastUpdated }: HeaderProps) => {
   now.setMinutes(date.getMinutes());
   now.setSeconds(0);
   now.setMilliseconds(0);
-  const difference = formatTimeDifference(lastUpdatedDate, now);
+  let difference = formatTimeDifference(lastUpdatedDate, now);
+
+  if (difference !== 'just now') {
+    difference += ' ago';
+  }
 
   return (
     <div className='headerContainer'>
       <div className='font-bold'>{time}</div>
-      <div>{difference} ago</div>
+      <div>{difference}</div>
     </div>
   );
 };
-
-function formatTimeDifference(startDate, endDate) {
-  const diffInMilliseconds = endDate - startDate;
-
-  // Calculate time difference components
-  const seconds = Math.floor(diffInMilliseconds / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-
-  const remainingMinutes = minutes % 60;
-
-  // Construct the time difference string
-  let timeDiffString = '';
-
-  if (hours > 0) {
-    timeDiffString += `${hours}hr`;
-  }
-
-  if (remainingMinutes > 0) {
-    if (timeDiffString) timeDiffString += ' ';
-    timeDiffString += `${remainingMinutes}min`;
-  }
-
-  // Handle edge case for exact 0 minutes
-  if (timeDiffString === '') {
-    timeDiffString = `now`;
-  }
-
-  return timeDiffString;
-}
 
 export default Header;

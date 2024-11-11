@@ -24,19 +24,23 @@ const Stock = ({ stockData, size }: StockProps) => {
 
   return (
     <div className={stockContainerClass}>
-      <div className='stockMain'>
+      <div className='stock'>
         <div>
-          <div className='stockMain-display'>
-            <p className='stockCode'>{stockData?.code}</p>
-            <img
-              className='stockLogo'
-              src={stockData?.logoURL}
-              alt={stockData?.code}
-            />
+          <div className='stock--display'>
+            <p className='stock--code'>{stockData?.code}</p>
+            {stockData?.logo ? (
+              <img
+                className='stock--logo'
+                src={stockData?.logo}
+                alt={stockData?.code}
+              />
+            ) : (
+              <></>
+            )}
           </div>
-          <p className='stockDescription'>{stockData?.description}</p>
+          <p className='stock--description'>{stockData?.description}</p>
         </div>
-        <div className='stockMain--data'>
+        <div className='stock--data'>
           <p>{stockData?.current}</p>
           <p className={changeClass}>{stockData?.change}</p>
         </div>
@@ -44,28 +48,28 @@ const Stock = ({ stockData, size }: StockProps) => {
       {size == StockDisplaySize.Large || size == StockDisplaySize.Medium ? (
         <>
           <hr />
-          <div className='stockInfo'>
-            <div className='stockInfo--data'>
+          <div className='stock--info'>
+            <div className='stock--infoData'>
               <label>Open</label>
               <p>{stockData?.opening}</p>
             </div>
-            <div className='stockInfo--data'>
+            <div className='stock--infoData'>
               <label>High</label>
               <p>{stockData?.high}</p>
             </div>
-            <div className='stockInfo--data'>
+            <div className='stock--infoData'>
               <label>Low</label>
               <p>{stockData?.low}</p>
             </div>
             {size == StockDisplaySize.Large ? (
               <>
-                <div className='stockInfo--data'>
+                <div className='stock--infoData'>
                   <label>% Change</label>
                   <p className={percentChangeClass}>
                     {stockData?.percentChange}
                   </p>
                 </div>
-                <div className='stockInfo--data'>
+                <div className='stock--infoData'>
                   <label>Previous Close</label>
                   <p>{stockData?.previousClose}</p>
                 </div>

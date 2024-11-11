@@ -74,9 +74,9 @@ export type StockData = {
    */
   description: string;
   /**
-   * Logo URL
+   * Logo
    */
-  logoURL: string;
+  logo: string;
   /**
    * Current price
    */

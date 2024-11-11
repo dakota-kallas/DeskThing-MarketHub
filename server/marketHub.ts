@@ -95,7 +95,14 @@ class MarketHubService {
       this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
       this.marketHubData.news = (
         await this.finnhubClient.marketNews('general')
-      )?.data;
+      )?.data
+        .sort((a, b) => {
+          // Handle undefined datetime values, treating them as oldest
+          if (a.datetime === undefined) return 1;
+          if (b.datetime === undefined) return -1;
+          return b.datetime - a.datetime;
+        })
+        .slice(0, 2); // Take the first 2 records
     }
 
     this.lastUpdateTime = new Date();
@@ -167,10 +174,14 @@ class MarketHubService {
           ? '+' + response.data.d
           : response.data.d;
 
+      const logo = profileResponse.data.logo
+        ? await DeskThing.encodeImageFromUrl(profileResponse.data.logo)
+        : undefined;
+
       const stockData = {
         code: stockCode,
         description: profileResponse.data.name,
-        logoURL: profileResponse.data.logo,
+        logo: logo,
         current: response.data.c,
         change,
         percentChange: response.data.dp,
@@ -186,13 +197,6 @@ class MarketHubService {
     }
 
     return undefined;
-  }
-
-  private formatDate(date: Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   async stop() {

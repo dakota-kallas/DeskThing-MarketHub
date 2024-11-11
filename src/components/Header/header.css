@@ -8,6 +8,7 @@
   background-color: var(--surface-400);
   padding-left: 16px;
   padding-right: 16px;
+  font-size: 18px;
 }
 
 .lastUpdatedContainer {

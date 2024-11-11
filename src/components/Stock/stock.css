@@ -18,53 +18,60 @@
   border-radius: 8px;
 }
 
-.stockMain {
+.stock {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   flex: 1 1 auto;
+  font-size: 18px;
 }
 
-.stockMain-display {
+.stock--display {
   display: flex;
   flex-direction: row;
-  gap: 8px;
   align-items: center;
 }
 
-.stockLogo {
+.stock--logo {
   width: 16px;
   height: 16px;
+  margin-left: 8px;
   border-radius: 50%;
 }
 
-.stockMain--data {
+.stock--data {
   text-align: end;
 }
 
 hr {
   margin-top: 8px;
   margin-bottom: 8px;
-  border: 1px solid var(--surface-300); /* Apply the color to the border */
+  border: 1px solid var(--surface-300);
 }
 
-.stockInfo {
+.stock--info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  font-size: 18px;
 }
 
-.stockInfo--data {
+/* Work around because flex gap is not supported */
+.stock--info > *:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.stock--infoData {
   display: flex;
   justify-content: space-between;
 }
 
-.stockCode {
+.stock--code {
   font-weight: bold;
 }
 
-.stockDescription {
-  font-size: 12px;
+.stock--description {
+  font-size: 14px;
   text-overflow: ellipsis;
   color: var(--sub-text);
+  max-width: 130px;
 }

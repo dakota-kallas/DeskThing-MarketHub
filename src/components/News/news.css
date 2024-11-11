@@ -1,0 +1,28 @@
+.newsContainer {
+  background-color: var(--surface-100);
+  color: var(--text);
+  padding: 8px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.news--headline {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits text to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2em; /* Adjust line height as needed */
+  max-height: 2.4em; /* Ensures it fits within two lines */
+  font-size: 18px;
+}
+
+.news--date {
+  color: var(--sub-text);
+  display: flex;
+}
+
+.news--dateSeperator {
+  margin-left: 4px;
+  margin-right: 4px;
+}

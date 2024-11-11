@@ -101,6 +101,11 @@ const Stocks = ({ marketHubData }: StocksProps) => {
       ) : (
         <></>
       )}
+      {marketHubData?.news && marketHubData.news.length > 1 ? (
+        <News newsData={marketHubData.news[1]} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
