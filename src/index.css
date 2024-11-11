@@ -24,10 +24,11 @@ button:active {
   --surface-400: #575757;
   --surface-500: #717171;
   --surface-600: #8b8b8b;
+  --text: white;
 }
 
-.background {
-  background-color: #f9f9f9;
+.appContainer {
+  background-color: var(--surface-300);
 }
 
 .stockContainer {
@@ -36,8 +37,8 @@ button:active {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: black;
-  color: white;
+  background-color: var(--surface-100);
+  color: var(--text);
   padding: 8px;
   border-radius: 8px;
 }

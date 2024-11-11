@@ -21,6 +21,10 @@ export type StockData = {
    */
   code: string;
   /**
+   * Description
+   */
+  description: string;
+  /**
    * Current price
    */
   current: number;

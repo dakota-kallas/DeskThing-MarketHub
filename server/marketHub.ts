@@ -42,65 +42,9 @@ class MarketHubService {
     this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
     this.marketHubData = {} as MarketHubData;
 
-    if (this.stockCode1?.length > 0) {
-      const response = await this.finnhubClient.quote(this.stockCode1);
-      this.deskthing.sendLog(
-        `Market Hub data received from Finnhub API for ${this.stockCode1}.`
-      );
-
-      const stock1Data = {
-        code: this.stockCode1,
-        current: response.data.c,
-        change: response.data.d,
-        percentChange: response.data.dp,
-        high: response.data.h,
-        low: response.data.l,
-        opening: response.data.o,
-        previousClose: response.data.pc,
-      } as StockData;
-
-      this.marketHubData.stock1 = stock1Data;
-    }
-
-    if (this.stockCode2?.length > 0) {
-      const response = await this.finnhubClient.quote(this.stockCode2);
-      this.deskthing.sendLog(
-        `Market Hub data received from Finnhub API for ${this.stockCode2}.`
-      );
-
-      const stock2Data = {
-        code: this.stockCode2,
-        current: response.data.c,
-        change: response.data.d,
-        percentChange: response.data.dp,
-        high: response.data.h,
-        low: response.data.l,
-        opening: response.data.o,
-        previousClose: response.data.pc,
-      } as StockData;
-
-      this.marketHubData.stock2 = stock2Data;
-    }
-
-    if (this.stockCode3?.length > 0) {
-      const response = await this.finnhubClient.quote(this.stockCode3);
-      this.deskthing.sendLog(
-        `Market Hub data received from Finnhub API for ${this.stockCode3}.`
-      );
-
-      const stock3Data = {
-        code: this.stockCode3,
-        current: response.data.c,
-        change: response.data.d,
-        percentChange: response.data.dp,
-        high: response.data.h,
-        low: response.data.l,
-        opening: response.data.o,
-        previousClose: response.data.pc,
-      } as StockData;
-
-      this.marketHubData.stock3 = stock3Data;
-    }
+    this.marketHubData.stock1 = await this.fetchStockData(this.stockCode1);
+    this.marketHubData.stock2 = await this.fetchStockData(this.stockCode2);
+    this.marketHubData.stock3 = await this.fetchStockData(this.stockCode3);
 
     this.lastUpdateTime = new Date();
 
@@ -118,7 +62,7 @@ class MarketHubService {
     this.updateTaskId = DeskThing.addBackgroundTaskLoop(async () => {
       this.updateMarketHub();
       await this.sleep(5 * 60 * 1000);
-    }); // Update every 5 minute
+    }); // Update every 5 minutes
   }
 
   private sleep(ms: number) {
@@ -141,6 +85,41 @@ class MarketHubService {
     } catch (error) {
       this.deskthing.sendLog('Error updating Market Hub data: ' + error);
     }
+  }
+
+  private async fetchStockData(stockCode: string) {
+    if (!stockCode || stockCode.length === 0) return;
+
+    const lookupResponse = await this.finnhubClient.symbolSearch(stockCode);
+
+    // Ensure the stock code exists and matches the one set by the user
+    if (
+      lookupResponse.data.count &&
+      lookupResponse.data.count > 0 &&
+      lookupResponse.data.result &&
+      lookupResponse.data.result[0].symbol === stockCode
+    ) {
+      const response = await this.finnhubClient.quote(stockCode);
+      this.deskthing.sendLog(
+        `Market Hub data received from Finnhub API for ${stockCode}.`
+      );
+
+      const stockData = {
+        code: stockCode,
+        description: lookupResponse.data.result[0].description,
+        current: response.data.c,
+        change: response.data.d,
+        percentChange: response.data.dp,
+        high: response.data.h,
+        low: response.data.l,
+        opening: response.data.o,
+        previousClose: response.data.pc,
+      } as StockData;
+
+      return stockData;
+    }
+
+    return undefined;
   }
 
   async stop() {

@@ -29,6 +29,11 @@ const Simple = ({ marketHubData }: MarketHubProps) => {
     };
   }, []);
 
+  const changeClass =
+    marketHubData?.stock1 && marketHubData.stock1.change > 0
+      ? 'text-green-500'
+      : 'text-red-500';
+
   return (
     <div className='stockContainer'>
       <div>
@@ -36,7 +41,7 @@ const Simple = ({ marketHubData }: MarketHubProps) => {
       </div>
       <div>
         <p>{marketHubData?.stock1?.current}</p>
-        <p>{marketHubData?.stock1?.change}</p>
+        <p className={changeClass}>{marketHubData?.stock1?.change}</p>
       </div>
     </div>
   );

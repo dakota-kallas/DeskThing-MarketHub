@@ -27,7 +27,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className='background w-screen h-screen flex justify-center items-center'>
+    <div className='appContainer w-screen h-screen'>
       <Stock marketHubData={marketHubData} />
     </div>
   );
