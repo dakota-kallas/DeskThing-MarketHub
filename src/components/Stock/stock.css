@@ -74,4 +74,6 @@ hr {
   text-overflow: ellipsis;
   color: var(--sub-text);
   max-width: 130px;
+  overflow: hidden;
+  white-space: nowrap;
 }

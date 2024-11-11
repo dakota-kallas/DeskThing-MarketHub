@@ -9,7 +9,12 @@ interface StocksProps {
 
 const Stocks = ({ marketHubData }: StocksProps) => {
   if (!marketHubData) {
-    return <div className='contentContainer'>No stock data available</div>;
+    return (
+      <div className='info'>
+        <p className='info--message'>API Not Configured</p>
+        <p className='info--description'>Double-check Configuration</p>
+      </div>
+    );
   }
 
   let size: StockDisplaySize;
@@ -34,6 +39,29 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   return (
     <div className='contentContainer'>
+      {marketHubData.count > 0 ? (
+        getStockNodes()
+      ) : (
+        <div className='info'>
+          <p className='info--message'>No Stock Data Available</p>
+          <p className='info--description'>Double-check Configuration</p>
+        </div>
+      )}
+      {marketHubData?.news && marketHubData.news.length > 0 ? (
+        <News newsData={marketHubData.news[0]} />
+      ) : (
+        <></>
+      )}
+      {marketHubData?.news && marketHubData.news.length > 1 ? (
+        <News newsData={marketHubData.news[1]} />
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+
+  function getStockNodes() {
+    return (
       <div className={stocksContainerClasses}>
         {marketHubData?.stock1 ? (
           <Stock stockData={marketHubData.stock1} size={size} />
@@ -96,18 +124,8 @@ const Stocks = ({ marketHubData }: StocksProps) => {
           <></>
         )}
       </div>
-      {marketHubData?.news && marketHubData.news.length > 0 ? (
-        <News newsData={marketHubData.news[0]} />
-      ) : (
-        <></>
-      )}
-      {marketHubData?.news && marketHubData.news.length > 1 ? (
-        <News newsData={marketHubData.news[1]} />
-      ) : (
-        <></>
-      )}
-    </div>
-  );
+    );
+  }
 };
 
 export default Stocks;
