@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { MarketHubData } from '../../stores/marketHubStore';
 import News from '../News/News';
 import Stock, { StockDisplaySize } from '../Stock/Stock';
@@ -8,18 +9,33 @@ interface StocksProps {
 }
 
 const Stocks = ({ marketHubData }: StocksProps) => {
-  if (!marketHubData) {
-    return (
-      <div className='info'>
-        <p className='info--message'>API Not Configured</p>
-        <p className='info--description'>Double-check Configuration</p>
-      </div>
-    );
-  }
+  const [isTallEnough, setIsTallEnough] = useState(false);
+  const contentContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = contentContainerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        if (entry.target === container) {
+          setIsTallEnough(entry.contentRect.height > 400);
+        }
+      }
+    });
+
+    resizeObserver.observe(container);
+
+    // Cleanup observer on component unmount
+    return () => {
+      resizeObserver.unobserve(container);
+      resizeObserver.disconnect();
+    };
+  }, [contentContainerRef.current]);
 
   let size: StockDisplaySize;
 
-  switch (marketHubData.count) {
+  switch (marketHubData?.count) {
     case 1:
     case 2:
     case 3:
@@ -37,22 +53,26 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   const stocksContainerClasses = `stocksContainer stocksContainer--${size}`;
 
+  const message = marketHubData
+    ? 'No Stock Data Available'
+    : 'API Not Configured';
+
   return (
-    <div className='contentContainer'>
-      {marketHubData.count > 0 ? (
+    <div className='contentContainer' ref={contentContainerRef}>
+      {marketHubData && marketHubData.count > 0 ? (
         getStockNodes()
       ) : (
         <div className='info'>
-          <p className='info--message'>No Stock Data Available</p>
+          <p className='info--message'>{message}</p>
           <p className='info--description'>Double-check Configuration</p>
         </div>
       )}
-      {marketHubData?.news && marketHubData.news.length > 0 ? (
+      {isTallEnough && marketHubData?.news && marketHubData.news.length > 0 ? (
         <News newsData={marketHubData.news[0]} />
       ) : (
         <></>
       )}
-      {marketHubData?.news && marketHubData.news.length > 1 ? (
+      {isTallEnough && marketHubData?.news && marketHubData.news.length > 1 ? (
         <News newsData={marketHubData.news[1]} />
       ) : (
         <></>

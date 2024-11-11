@@ -54,7 +54,7 @@ export type MarketHubData = {
   /**
    * Stock #12
    */
-  news?: MarketNews[];
+  news?: MarketNewsItem[];
   /**
    * Number of Stocks configured in the Market Hub
    */
@@ -62,7 +62,7 @@ export type MarketHubData = {
   /**
    * Last Refreshed Time
    */
-  lastUpdated?: Date;
+  lastUpdated?: string;
 };
 export type StockData = {
   /**
@@ -106,6 +106,14 @@ export type StockData = {
    */
   previousClose: number;
 };
+
+export interface MarketNewsItem extends MarketNews {
+  /**
+   * Local time string
+   */
+  time?: string;
+}
+
 type MarketHubListener = (marketHubData: MarketHubData | null) => void;
 
 export class MarketHubStore {
@@ -153,7 +161,6 @@ export class MarketHubStore {
       type: 'log',
       payload: 'Getting Market Hub data',
     });
-    console.log('notifyListeners');
     this.listeners.forEach((listener) => listener(this.marketHubData));
   }
   async requestMarketHubData(): Promise<void> {

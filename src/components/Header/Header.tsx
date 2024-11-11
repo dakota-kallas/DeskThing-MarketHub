@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { SettingsStore } from '../../stores/settingsStore';
 import './header.css';
-import { formatTimeDifference } from '../../utilities/date';
+import refreshImg from '../../assets/refresh.png';
+import { getTimeDifference } from '../../utilities/date';
 
 // Move getInstance() calls outside the hook to avoid redundant calls
 const settingsStore = SettingsStore.getInstance();
 
 interface HeaderProps {
-  lastUpdated?: Date;
+  lastUpdated?: string;
 }
 
 const Header = ({ lastUpdated }: HeaderProps) => {
@@ -15,10 +16,13 @@ const Header = ({ lastUpdated }: HeaderProps) => {
   const [time, setTime] = useState(() => {
     return settingsStore.getTime().trim();
   });
+  const currentDifference = getTimeDifference(time, lastUpdated);
+  const [difference, setDifference] = useState(currentDifference);
 
   useEffect(() => {
     const handleTime = async (time: string) => {
       setTime(time.trim());
+      setDifference(getTimeDifference(time, lastUpdated));
     };
 
     // Set the time listener
@@ -30,29 +34,15 @@ const Header = ({ lastUpdated }: HeaderProps) => {
     };
   }, []);
 
-  if (!lastUpdated) {
-    return null;
-  }
-
-  const lastUpdatedDate = new Date(lastUpdated);
-  lastUpdatedDate.setSeconds(0);
-  lastUpdatedDate.setMilliseconds(0);
-  const date = new Date(`1970-01-01 ${time}`);
-  const now = new Date();
-  now.setHours(date.getHours());
-  now.setMinutes(date.getMinutes());
-  now.setSeconds(0);
-  now.setMilliseconds(0);
-  let difference = formatTimeDifference(lastUpdatedDate, now);
-
-  if (difference !== 'just now') {
-    difference += ' ago';
-  }
-
   return (
-    <div className='headerContainer'>
+    <div className='header'>
       <div className='font-bold'>{time}</div>
-      <div>{difference}</div>
+      <div className='header--refresh'>
+        <span>
+          <img className='header--refreshImg' src={refreshImg} />
+        </span>
+        <span>{difference ?? currentDifference}</span>
+      </div>
     </div>
   );
 };

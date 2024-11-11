@@ -1,4 +1,4 @@
-.headerContainer {
+.header {
   height: 32px;
   display: flex;
   flex-direction: row;
@@ -11,8 +11,15 @@
   font-size: 18px;
 }
 
-.lastUpdatedContainer {
+.header--refresh {
   display: flex;
   flex-direction: row;
-  gap: 4px;
+  align-items: center;
+  justify-content: center;
+}
+
+.header--refreshImg {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
 }

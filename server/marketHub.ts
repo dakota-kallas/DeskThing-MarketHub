@@ -22,22 +22,14 @@ class MarketHubService {
   private stockCode10: string = '';
   private stockCode11: string = '';
   private stockCode12: string = '';
+  private refreshInterval: number = 5;
+  private apiKey?: string = undefined;
   private count = 0;
 
   constructor() {
     this.deskthing = DeskThing;
     this.updateMarketHub();
     this.scheduleIntervalUpdates();
-    this.finnhubClient = new DefaultApi({
-      apiKey: 'csn5lk9r01qqapai51vgcsn5lk9r01qqapai5200',
-      isJsonMime: (input) => {
-        try {
-          JSON.parse(input);
-          return true;
-        } catch (error) {}
-        return false;
-      },
-    });
   }
 
   static getInstance(): MarketHubService {
@@ -48,9 +40,18 @@ class MarketHubService {
   }
 
   private async updateMarketHub() {
-    console.log('Updating Market Hub data...');
     this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
     this.marketHubData = {} as MarketHubData;
+    this.finnhubClient = new DefaultApi({
+      apiKey: this.apiKey,
+      isJsonMime: (input) => {
+        try {
+          JSON.parse(input);
+          return true;
+        } catch (error) {}
+        return false;
+      },
+    });
 
     this.count = 0;
 
@@ -92,19 +93,51 @@ class MarketHubService {
     }
 
     this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
-    this.marketHubData.news = (
-      await this.finnhubClient.marketNews('general')
-    )?.data
-      .sort((a, b) => {
-        // Handle undefined datetime values, treating them as oldest
-        if (a.datetime === undefined) return 1;
-        if (b.datetime === undefined) return -1;
-        return b.datetime - a.datetime;
-      })
-      .slice(0, this.count > 3 ? 1 : 2);
+    try {
+      this.marketHubData.news = (
+        await this.finnhubClient.marketNews('general')
+      )?.data
+        .sort((a, b) => {
+          // Handle undefined datetime values, treating them as oldest
+          if (a.datetime === undefined) return 1;
+          if (b.datetime === undefined) return -1;
+          return b.datetime - a.datetime;
+        })
+        .slice(0, this.count > 3 ? 1 : 2)
+        .map((item) => {
+          const time = item.datetime ? item.datetime * 1000 : '';
+          const date = new Date(time);
+          const timeString = date.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          });
 
-    this.lastUpdateTime = new Date();
-    this.marketHubData.lastUpdated = this.lastUpdateTime;
+          return {
+            ...item,
+            time: timeString,
+          };
+        });
+    } catch (error) {
+      let message = 'Unable to fetch Market Hub News data.';
+      if (error.response && error.response.status === 401) {
+        // Handle invalid API key error (401 Unauthorized)
+        message += ' Invalid API key or unauthorized request.';
+      }
+      console.error(message);
+      this.deskthing.sendError(message);
+      this.marketHubData.news = [];
+      return undefined;
+    }
+
+    const now = new Date();
+    const timeString = now.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true, // Use 12-hour format (AM/PM)
+    });
+    this.lastUpdateTime = now;
+    this.marketHubData.lastUpdated = timeString;
     this.marketHubData.count = this.count;
 
     this.deskthing.sendLog(`Market Hub updated`);
@@ -120,8 +153,9 @@ class MarketHubService {
     }
     this.updateTaskId = DeskThing.addBackgroundTaskLoop(async () => {
       this.updateMarketHub();
-      await this.sleep(5 * 60 * 1000);
-    }); // Update every 5 minutes
+      const interval = this.refreshInterval > 0 ? this.refreshInterval : 1;
+      await this.sleep(interval * 60 * 1000);
+    }); // Update every set amount of minutes
   }
 
   private sleep(ms: number) {
@@ -135,7 +169,9 @@ class MarketHubService {
     }
     try {
       this.deskthing.sendLog('Updating settings');
-      console.log('Updating Market Hub data to', data);
+      this.apiKey = (data.settings.apiKey.value as string) || undefined;
+      this.refreshInterval =
+        (data.settings.refreshInterval.value as number) || 5;
       this.stockCode1 = (data.settings.stockCode1.value as string) || '';
       this.stockCode2 = (data.settings.stockCode2.value as string) || '';
       this.stockCode3 = (data.settings.stockCode3.value as string) || '';
@@ -148,7 +184,17 @@ class MarketHubService {
       this.stockCode10 = (data.settings.stockCode10.value as string) || '';
       this.stockCode11 = (data.settings.stockCode11.value as string) || '';
       this.stockCode12 = (data.settings.stockCode12.value as string) || '';
-      console.log('Updated Market Hub data');
+      this.deskthing.sendLog(`Setting up Finnhub API client: ${this.apiKey}`);
+      this.finnhubClient = new DefaultApi({
+        apiKey: this.apiKey,
+        isJsonMime: (input) => {
+          try {
+            JSON.parse(input);
+            return true;
+          } catch (error) {}
+          return false;
+        },
+      });
       this.updateMarketHub();
     } catch (error) {
       this.deskthing.sendLog('Error updating Market Hub data: ' + error);
@@ -158,43 +204,56 @@ class MarketHubService {
   private async fetchStockData(stockCode: string) {
     if (!stockCode || stockCode.length === 0) return;
 
-    const profileResponse = await this.finnhubClient.companyProfile2(stockCode);
-
-    // Ensure the stock code exists and matches the one set by the user
-    if (profileResponse.data && profileResponse.data.ticker) {
-      const response = await this.finnhubClient.quote(stockCode);
-      this.deskthing.sendLog(
-        `Market Hub data received from Finnhub API for ${stockCode}.`
+    try {
+      const profileResponse = await this.finnhubClient.companyProfile2(
+        stockCode
       );
 
-      const change =
-        response.data.d && response.data.d > 0
-          ? '+' + response.data.d
-          : response.data.d;
+      // Ensure the stock code exists and matches the one set by the user
+      if (profileResponse.data && profileResponse.data.ticker) {
+        const response = await this.finnhubClient.quote(stockCode);
+        this.deskthing.sendLog(
+          `Market Hub data received from Finnhub API for ${stockCode}.`
+        );
 
-      const logo = profileResponse.data.logo
-        ? await DeskThing.encodeImageFromUrl(profileResponse.data.logo)
-        : undefined;
+        const change =
+          response.data.d && response.data.d > 0
+            ? '+' + response.data.d
+            : response.data.d;
 
-      const stockData = {
-        code: stockCode,
-        description: profileResponse.data.name,
-        logo: logo,
-        current: response.data.c,
-        change,
-        percentChange: response.data.dp,
-        high: response.data.h,
-        low: response.data.l,
-        opening: response.data.o,
-        previousClose: response.data.pc,
-      } as StockData;
+        const logo = profileResponse.data.logo
+          ? await DeskThing.encodeImageFromUrl(profileResponse.data.logo)
+          : undefined;
 
-      this.count++;
+        const stockData = {
+          code: stockCode,
+          description: profileResponse.data.name,
+          logo: logo,
+          current: response.data.c,
+          change,
+          percentChange: response.data.dp,
+          high: response.data.h,
+          low: response.data.l,
+          opening: response.data.o,
+          previousClose: response.data.pc,
+        } as StockData;
 
-      return stockData;
+        this.count++;
+
+        return stockData;
+      }
+
+      return undefined;
+    } catch (error) {
+      let message = 'Unable to fetch Market Hub Stock data.';
+      if (error.response && error.response.status === 401) {
+        // Handle invalid API key error (401 Unauthorized)
+        message += ' Invalid API key or unauthorized request.';
+      }
+      console.error(message);
+      this.deskthing.sendError(message);
+      return undefined;
     }
-
-    return undefined;
   }
 
   async stop() {

@@ -1,31 +1,39 @@
-import { MarketNews } from 'finnhub-ts';
 import './news.css';
-import { formatTimeDifference } from '../../utilities/date';
+import { getTimeDifference } from '../../utilities/date';
+import settingsStore from '../../stores/settingsStore';
+import { useEffect, useState } from 'react';
+import { MarketNewsItem } from '../../stores/marketHubStore';
 
 interface NewsProps {
-  newsData: MarketNews;
+  newsData: MarketNewsItem;
 }
 
 const News = ({ newsData }: NewsProps) => {
-  let dateDisplay = '';
+  const currentDifference = getTimeDifference(
+    settingsStore.getTime().trim(),
+    newsData.time
+  );
+  const [difference, setDifference] = useState(currentDifference);
 
-  if (newsData.datetime) {
-    const date = new Date(newsData.datetime * 1000);
-    console.log('News Date:', date);
-    const now = new Date();
+  useEffect(() => {
+    const handleTime = async (time: string) => {
+      setDifference(getTimeDifference(time, newsData.time));
+    };
 
-    dateDisplay = formatTimeDifference(date, now);
+    // Set the time listener
+    const removeTimeListener = settingsStore.onTime(handleTime);
 
-    if (dateDisplay !== 'just now') {
-      dateDisplay += ' ago';
-    }
-  }
+    return () => {
+      // Clean up listeners on unmount
+      removeTimeListener();
+    };
+  }, []);
 
   return (
-    <div className='newsContainer'>
+    <div className='news'>
       <div className='news--headline font-bold'>{newsData.headline}</div>
       <div className='news--date'>
-        <span>{dateDisplay}</span>
+        <span>{difference}</span>
         <span className='news--dateSeperator'>•</span>
         <span>{newsData.source}</span>
       </div>

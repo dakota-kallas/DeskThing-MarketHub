@@ -1,4 +1,10 @@
-.newsContainer {
+@media (max-width: 200px) {
+  .news {
+    display: none;
+  }
+}
+
+.news {
   background-color: var(--surface-100);
   color: var(--text);
   padding: 8px;
@@ -20,6 +26,7 @@
 .news--date {
   color: var(--sub-text);
   display: flex;
+  margin-top: 2px;
 }
 
 .news--dateSeperator {
