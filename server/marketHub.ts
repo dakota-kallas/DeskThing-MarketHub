@@ -91,19 +91,17 @@ class MarketHubService {
       this.marketHubData.stock12 = await this.fetchStockData(this.stockCode12);
     }
 
-    if (this.count <= 3) {
-      this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
-      this.marketHubData.news = (
-        await this.finnhubClient.marketNews('general')
-      )?.data
-        .sort((a, b) => {
-          // Handle undefined datetime values, treating them as oldest
-          if (a.datetime === undefined) return 1;
-          if (b.datetime === undefined) return -1;
-          return b.datetime - a.datetime;
-        })
-        .slice(0, 2); // Take the first 2 records
-    }
+    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
+    this.marketHubData.news = (
+      await this.finnhubClient.marketNews('general')
+    )?.data
+      .sort((a, b) => {
+        // Handle undefined datetime values, treating them as oldest
+        if (a.datetime === undefined) return 1;
+        if (b.datetime === undefined) return -1;
+        return b.datetime - a.datetime;
+      })
+      .slice(0, this.count > 3 ? 1 : 2);
 
     this.lastUpdateTime = new Date();
     this.marketHubData.lastUpdated = this.lastUpdateTime;
