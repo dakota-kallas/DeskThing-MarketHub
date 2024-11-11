@@ -2,6 +2,10 @@
 
 The Market Hub app for DeskThing offers a quick-access, at-a-glance view of selected stocks. It uses the [Finnhub API](https://finnhub.io).
 
+![image](https://github.com/user-attachments/assets/cce90152-fc7c-41d8-9604-a33ebb831f97)
+
+![image](https://github.com/user-attachments/assets/ea712b0d-7864-47fa-980f-e93436280c56)
+
 ## Features
 
 - **Stock Tracker**: Track stock data using company ticker symbols. (Supports up to 12 stocks at one time)
@@ -22,6 +26,7 @@ Current as of DeskThing v0.9.2
 
 1. Download the latest release build
 2. Navigate to the `Downloads > App` tab and click on `Upload App`
+   - <img src="https://github.com/user-attachments/assets/7da9db21-64c5-4c55-898a-de97b9e6f1c1" height="300" />
 3. Select the `build.zip` file that was downloaded
 4. Navigate to the `Settings` of `Market Hub`
 5. Enter your desired configuration
