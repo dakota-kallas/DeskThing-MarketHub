@@ -1,4 +1,5 @@
 import { MarketHubData } from '../../stores/marketHubStore';
+import News from '../News/News';
 import Stock, { StockDisplaySize } from '../Stock/Stock';
 import './stocks.css';
 
@@ -13,8 +14,6 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   let size: StockDisplaySize;
 
-  console.log('marketHubData.count:', marketHubData.count);
-
   switch (marketHubData.count) {
     case 1:
     case 2:
@@ -24,16 +23,18 @@ const Stocks = ({ marketHubData }: StocksProps) => {
     case 4:
     case 5:
     case 6:
-      size = StockDisplaySize.Medium;
+      size = StockDisplaySize.Small;
       break;
     default:
       size = StockDisplaySize.Small;
       break;
   }
 
+  const stocksContainerClasses = `stocksContainer stocksContainer--${size}`;
+
   return (
     <div className='contentContainer'>
-      <div className='stocksContainer'>
+      <div className={stocksContainerClasses}>
         {marketHubData?.stock1 ? (
           <Stock stockData={marketHubData.stock1} size={size} />
         ) : (
@@ -95,6 +96,11 @@ const Stocks = ({ marketHubData }: StocksProps) => {
           <></>
         )}
       </div>
+      {marketHubData?.news && marketHubData.news.length > 0 ? (
+        <News newsData={marketHubData.news[0]} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

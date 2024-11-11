@@ -1,5 +1,6 @@
 import { DeskThing } from 'deskthing-client';
 import { SocketData } from 'deskthing-server';
+import { MarketNews } from 'finnhub-ts';
 
 export type MarketHubData = {
   /**
@@ -51,6 +52,10 @@ export type MarketHubData = {
    */
   stock12?: StockData;
   /**
+   * Stock #12
+   */
+  news?: MarketNews[];
+  /**
    * Number of Stocks configured in the Market Hub
    */
   count: number;
@@ -68,6 +73,10 @@ export type StockData = {
    * Description
    */
   description: string;
+  /**
+   * Logo URL
+   */
+  logoURL: string;
   /**
    * Current price
    */

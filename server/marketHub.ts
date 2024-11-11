@@ -91,6 +91,13 @@ class MarketHubService {
       this.marketHubData.stock12 = await this.fetchStockData(this.stockCode12);
     }
 
+    if (this.count <= 3) {
+      this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
+      this.marketHubData.news = (
+        await this.finnhubClient.marketNews('general')
+      )?.data;
+    }
+
     this.lastUpdateTime = new Date();
     this.marketHubData.lastUpdated = this.lastUpdateTime;
     this.marketHubData.count = this.count;
@@ -146,15 +153,10 @@ class MarketHubService {
   private async fetchStockData(stockCode: string) {
     if (!stockCode || stockCode.length === 0) return;
 
-    const lookupResponse = await this.finnhubClient.symbolSearch(stockCode);
+    const profileResponse = await this.finnhubClient.companyProfile2(stockCode);
 
     // Ensure the stock code exists and matches the one set by the user
-    if (
-      lookupResponse.data.count &&
-      lookupResponse.data.count > 0 &&
-      lookupResponse.data.result &&
-      lookupResponse.data.result[0].symbol === stockCode
-    ) {
+    if (profileResponse.data && profileResponse.data.ticker) {
       const response = await this.finnhubClient.quote(stockCode);
       this.deskthing.sendLog(
         `Market Hub data received from Finnhub API for ${stockCode}.`
@@ -167,7 +169,8 @@ class MarketHubService {
 
       const stockData = {
         code: stockCode,
-        description: lookupResponse.data.result[0].description,
+        description: profileResponse.data.name,
+        logoURL: profileResponse.data.logo,
         current: response.data.c,
         change,
         percentChange: response.data.dp,
@@ -183,6 +186,13 @@ class MarketHubService {
     }
 
     return undefined;
+  }
+
+  private formatDate(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   async stop() {

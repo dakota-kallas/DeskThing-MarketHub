@@ -11,7 +11,7 @@
 
 .stockContainer--large {
   width: 240px;
-  height: 100%;
+  height: fit-content;
   background-color: var(--surface-100);
   color: var(--text);
   padding: 8px;
@@ -23,6 +23,19 @@
   flex-direction: row;
   justify-content: space-between;
   flex: 1 1 auto;
+}
+
+.stockMain-display {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+}
+
+.stockLogo {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
 }
 
 .stockMain--data {

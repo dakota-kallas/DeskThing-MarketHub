@@ -26,7 +26,14 @@ const Stock = ({ stockData, size }: StockProps) => {
     <div className={stockContainerClass}>
       <div className='stockMain'>
         <div>
-          <p className='stockCode'>{stockData?.code}</p>
+          <div className='stockMain-display'>
+            <p className='stockCode'>{stockData?.code}</p>
+            <img
+              className='stockLogo'
+              src={stockData?.logoURL}
+              alt={stockData?.code}
+            />
+          </div>
           <p className='stockDescription'>{stockData?.description}</p>
         </div>
         <div className='stockMain--data'>
