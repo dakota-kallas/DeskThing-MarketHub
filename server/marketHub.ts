@@ -52,6 +52,8 @@ class MarketHubService {
     this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
     this.marketHubData = {} as MarketHubData;
 
+    this.count = 0;
+
     if (this.stockCode1 && this.stockCode1.length > 0) {
       this.marketHubData.stock1 = await this.fetchStockData(this.stockCode1);
     }
@@ -159,9 +161,9 @@ class MarketHubService {
       );
 
       const change =
-        response.data.c && response.data.c > 0
-          ? '+' + response.data.c
-          : response.data.c;
+        response.data.d && response.data.d > 0
+          ? '+' + response.data.d
+          : response.data.d;
 
       const stockData = {
         code: stockCode,

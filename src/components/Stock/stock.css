@@ -1,4 +1,4 @@
-.stockContainer {
+.stockContainer--small {
   width: 240px;
   display: flex;
   flex-direction: row;
@@ -7,6 +7,43 @@
   color: var(--text);
   padding: 8px;
   border-radius: 8px;
+}
+
+.stockContainer--large {
+  width: 240px;
+  height: 100%;
+  background-color: var(--surface-100);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.stockMain {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1 1 auto;
+}
+
+.stockMain--data {
+  text-align: end;
+}
+
+hr {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--surface-300); /* Apply the color to the border */
+}
+
+.stockInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stockInfo--data {
+  display: flex;
+  justify-content: space-between;
 }
 
 .stockCode {

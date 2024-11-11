@@ -15,17 +15,62 @@ export enum StockDisplaySize {
 const Stock = ({ stockData, size }: StockProps) => {
   const changeClass =
     stockData && stockData.change > 0 ? 'text-green-500' : 'text-red-500';
+  const percentChangeClass =
+    stockData && stockData.percentChange > 0
+      ? 'text-green-500'
+      : 'text-red-500';
+
+  const stockContainerClass = `stockContainer--${size}`;
 
   return (
-    <div className='stockContainer'>
-      <div>
-        <p className='stockCode'>{stockData?.code}</p>
-        <p className='stockDescription'>{stockData?.description}</p>
+    <div className={stockContainerClass}>
+      <div className='stockMain'>
+        <div>
+          <p className='stockCode'>{stockData?.code}</p>
+          <p className='stockDescription'>{stockData?.description}</p>
+        </div>
+        <div className='stockMain--data'>
+          <p>{stockData?.current}</p>
+          <p className={changeClass}>{stockData?.change}</p>
+        </div>
       </div>
-      <div>
-        <p>{stockData?.current}</p>
-        <p className={changeClass}>{stockData?.change}</p>
-      </div>
+      {size == StockDisplaySize.Large || size == StockDisplaySize.Medium ? (
+        <>
+          <hr />
+          <div className='stockInfo'>
+            <div className='stockInfo--data'>
+              <label>Open</label>
+              <p>{stockData?.opening}</p>
+            </div>
+            <div className='stockInfo--data'>
+              <label>High</label>
+              <p>{stockData?.high}</p>
+            </div>
+            <div className='stockInfo--data'>
+              <label>Low</label>
+              <p>{stockData?.low}</p>
+            </div>
+            {size == StockDisplaySize.Large ? (
+              <>
+                <div className='stockInfo--data'>
+                  <label>% Change</label>
+                  <p className={percentChangeClass}>
+                    {stockData?.percentChange}
+                  </p>
+                </div>
+                <div className='stockInfo--data'>
+                  <label>Previous Close</label>
+                  <p>{stockData?.previousClose}</p>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

@@ -13,6 +13,8 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   let size: StockDisplaySize;
 
+  console.log('marketHubData.count:', marketHubData.count);
+
   switch (marketHubData.count) {
     case 1:
     case 2:
