@@ -73,3 +73,7 @@ The app integrates with the [Finnhub API](https://finnhub.io/docs/api), using th
 ## Contributing
 
 Create a pull request and described the added / modified functionality.
+
+## Additional Screenshots
+<img src="https://github.com/user-attachments/assets/0d4553fa-fe64-4495-aa73-e149feb084c0" height="400" />
+<img src="https://github.com/user-attachments/assets/f08e0fd1-3b83-4370-926d-795daa384d37" height="400" />
