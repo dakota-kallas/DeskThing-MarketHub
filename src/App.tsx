@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { MarketStore } from './stores';
-import { MarketData } from './stores/marketStore';
-import Stock from './components/Stock';
+import { MarketHubStore } from './stores';
+import { MarketHubData } from './stores/marketHubStore';
+import Header from './components/Header/Header';
+import Stocks from './components/Stocks/Stocks';
 
 const App: React.FC = () => {
-  const marketStore = MarketStore;
-  const [marketData, setMarketData] = useState<MarketData | null>(
-    marketStore.getMarketData()
+  const marketHubStore = MarketHubStore;
+  const [marketHubData, setMarketHubData] = useState<MarketHubData | null>(
+    marketHubStore.getMarketHubData()
   );
 
   useEffect(() => {
-    const handleMarketData = async (data: MarketData | null) => {
+    const handleMarketHubData = async (data: MarketHubData | null) => {
       if (!data) {
-        console.log('No market data available');
+        console.log('No Market Hub data available');
         return;
       }
-      console.log('Market data updated:', data);
-      setMarketData(data);
+      console.log('Market Hub data updated:', data);
+      setMarketHubData(data);
     };
 
-    const removeListener = marketStore.on(handleMarketData);
+    const removeListener = marketHubStore.on(handleMarketHubData);
 
     return () => {
       removeListener();
@@ -27,8 +28,9 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <div className='bg-slate-800 w-screen h-screen flex justify-center items-center'>
-      <Stock marketData={marketData}/>
+    <div className='appContainer w-screen h-screen'>
+      <Header lastUpdated={marketHubData?.lastUpdated} />
+      <Stocks marketHubData={marketHubData} />
     </div>
   );
 };

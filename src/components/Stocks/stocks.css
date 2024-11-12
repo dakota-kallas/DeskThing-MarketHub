@@ -1,0 +1,73 @@
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: calc(100% - 32px);
+  padding: 8px 8px 16px 8px;
+}
+
+/* Work around because flex gap is not supported */
+.contentContainer > *:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  max-height: 250px;
+}
+
+.info--message {
+  color: var(--text);
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.info--description {
+  color: var(--sub-text);
+  font-size: 20px;
+}
+
+.stocksContainer {
+  display: flex;
+  width: 100%;
+}
+
+.stocksContainer--small {
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  overflow-y: auto;
+  max-height: 340px;
+}
+
+/* Work around because flex gap is not supported */
+.stocksContainer--small > * {
+  margin-bottom: 8px; /* Default bottom margin for spacing */
+}
+
+/* Work around because flex gap is not supported */
+.stocksContainer--small > *:nth-child(4n) {
+  margin-bottom: 0; /* Remove bottom margin for every 4th item */
+}
+
+/* Add margin-right to the first and fifth items */
+/* Work around because flex gap is not supported */
+.stocksContainer--small > *:nth-child(1),
+.stocksContainer--small > *:nth-child(5) {
+  margin-right: 16px;
+}
+
+.stocksContainer--large {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+/* Work around because flex gap is not supported */
+.stocksContainer--large > *:not(:last-child) {
+  margin-right: 16px;
+}

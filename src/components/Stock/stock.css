@@ -1,0 +1,79 @@
+.stockContainer--small {
+  width: 240px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--surface-100);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.stockContainer--large {
+  width: 240px;
+  height: fit-content;
+  background-color: var(--surface-100);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.stock {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  font-size: 18px;
+}
+
+.stock--display {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.stock--logo {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+  border-radius: 50%;
+}
+
+.stock--data {
+  text-align: end;
+}
+
+hr {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  border: 1px solid var(--surface-300);
+}
+
+.stock--info {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+}
+
+/* Work around because flex gap is not supported */
+.stock--info > *:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+.stock--infoData {
+  display: flex;
+  justify-content: space-between;
+}
+
+.stock--code {
+  font-weight: bold;
+}
+
+.stock--description {
+  font-size: 14px;
+  text-overflow: ellipsis;
+  color: var(--sub-text);
+  max-width: 130px;
+  overflow: hidden;
+  white-space: nowrap;
+}
