@@ -23,7 +23,18 @@ const start = async () => {
   if (
     !Data?.settings?.stockCode1 ||
     !Data?.settings?.stockCode2 ||
-    !Data?.settings?.stockCode3
+    !Data?.settings?.stockCode3 ||
+    !Data?.settings?.stockCode4 ||
+    !Data?.settings?.stockCode5 ||
+    !Data?.settings?.stockCode6 ||
+    !Data?.settings?.stockCode7 ||
+    !Data?.settings?.stockCode8 ||
+    !Data?.settings?.stockCode9 ||
+    !Data?.settings?.stockCode10 ||
+    !Data?.settings?.stockCode11 ||
+    !Data?.settings?.stockCode12 ||
+    !Data?.settings?.apiKey ||
+    !Data?.settings?.refreshInterval
   ) {
     setupSettings();
   }
@@ -124,7 +135,7 @@ const setupSettings = async () => {
   } as SettingsString;
 
   const apiKeySetting = {
-    label: 'FinnHhub API Key',
+    label: 'Finnhub API Key',
     description:
       'The (free) API Key you get from signing up at https://finnhub.io/dashboard.',
     type: 'string',
