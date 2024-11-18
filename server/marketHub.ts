@@ -214,7 +214,7 @@ class MarketHubService {
         return stockData;
       }
 
-      this.deskthing.sendLog('Invalid stock code: ' + stockCode);
+      this.deskthing.sendError('Invalid stock code: ' + stockCode);
 
       return undefined;
     } catch (error) {
