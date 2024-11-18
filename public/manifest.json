@@ -13,5 +13,5 @@
   "description": "The Market Hub app offers a quick-access, at-a-glance view of selected stocks. Free API Key required (https://finnhub.io/dashboard).",
   "author": "Dakota Kallas",
   "platforms": ["linux", "windows", "mac"],
-  "homepage": "https://github.com/dakota-kallas/DeskThing-MarketHub"
+  "repository": "https://github.com/dakota-kallas/DeskThing-MarketHub"
 }
