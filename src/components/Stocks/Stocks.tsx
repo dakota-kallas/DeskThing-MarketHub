@@ -41,11 +41,6 @@ const Stocks = ({ marketHubData }: StocksProps) => {
     case 3:
       size = StockDisplaySize.Large;
       break;
-    case 4:
-    case 5:
-    case 6:
-      size = StockDisplaySize.Small;
-      break;
     default:
       size = StockDisplaySize.Small;
       break;
@@ -53,9 +48,12 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   const stocksContainerClasses = `stocksContainer stocksContainer--${size}`;
 
-  const message = marketHubData
-    ? 'No Stock Data Available'
-    : 'API Not Configured';
+  console.log('marketHubData', marketHubData);
+
+  const message =
+    marketHubData && marketHubData.lastUpdated
+      ? 'No Stock Data Available'
+      : 'API Not Configured';
 
   return (
     <div className='contentContainer' ref={contentContainerRef}>
@@ -67,16 +65,16 @@ const Stocks = ({ marketHubData }: StocksProps) => {
           <p className='info--description'>Double-check Configuration</p>
         </div>
       )}
-      {isTallEnough && marketHubData?.news && marketHubData.news.length > 0 ? (
-        <News newsData={marketHubData.news[0]} />
-      ) : (
-        <></>
-      )}
-      {isTallEnough && marketHubData?.news && marketHubData.news.length > 1 ? (
-        <News newsData={marketHubData.news[1]} />
-      ) : (
-        <></>
-      )}
+      {(isTallEnough || (!isTallEnough && marketHubData?.count == 0)) &&
+        marketHubData?.news &&
+        marketHubData.news.length > 0 && (
+          <News newsData={marketHubData.news[0]} />
+        )}
+      {(isTallEnough || (!isTallEnough && marketHubData?.count == 0)) &&
+        marketHubData?.news &&
+        marketHubData.news.length > 1 && (
+          <News newsData={marketHubData.news[1]} />
+        )}
     </div>
   );
 

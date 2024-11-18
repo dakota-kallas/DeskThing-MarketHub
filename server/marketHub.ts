@@ -40,7 +40,7 @@ class MarketHubService {
   }
 
   private async updateMarketHub() {
-    this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
+    this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API...`);
     this.marketHubData = {} as MarketHubData;
     this.finnhubClient = new DefaultApi({
       apiKey: this.apiKey,
@@ -55,44 +55,15 @@ class MarketHubService {
 
     this.count = 0;
 
-    if (this.stockCode1 && this.stockCode1.length > 0) {
-      this.marketHubData.stock1 = await this.fetchStockData(this.stockCode1);
-    }
-    if (this.stockCode2 && this.stockCode2.length > 0) {
-      this.marketHubData.stock2 = await this.fetchStockData(this.stockCode2);
-    }
-    if (this.stockCode3 && this.stockCode3.length > 0) {
-      this.marketHubData.stock3 = await this.fetchStockData(this.stockCode3);
-    }
-    if (this.stockCode4 && this.stockCode4.length > 0) {
-      this.marketHubData.stock4 = await this.fetchStockData(this.stockCode4);
-    }
-    if (this.stockCode5 && this.stockCode5.length > 0) {
-      this.marketHubData.stock5 = await this.fetchStockData(this.stockCode5);
-    }
-    if (this.stockCode6 && this.stockCode6.length > 0) {
-      this.marketHubData.stock6 = await this.fetchStockData(this.stockCode6);
-    }
-    if (this.stockCode7 && this.stockCode7.length > 0) {
-      this.marketHubData.stock7 = await this.fetchStockData(this.stockCode7);
-    }
-    if (this.stockCode8 && this.stockCode8.length > 0) {
-      this.marketHubData.stock8 = await this.fetchStockData(this.stockCode8);
-    }
-    if (this.stockCode9 && this.stockCode9.length > 0) {
-      this.marketHubData.stock9 = await this.fetchStockData(this.stockCode9);
-    }
-    if (this.stockCode10 && this.stockCode10.length > 0) {
-      this.marketHubData.stock10 = await this.fetchStockData(this.stockCode10);
-    }
-    if (this.stockCode11 && this.stockCode11.length > 0) {
-      this.marketHubData.stock11 = await this.fetchStockData(this.stockCode11);
-    }
-    if (this.stockCode12 && this.stockCode12.length > 0) {
-      this.marketHubData.stock12 = await this.fetchStockData(this.stockCode12);
+    // Iterate through the stock codes and fetch the data
+    for (let i = 1; i <= 12; i++) {
+      const code = this[`stockCode${i}`];
+      if (code && code.length > 0) {
+        this.marketHubData[`stock${i}`] = await this.fetchStockData(code);
+      }
     }
 
-    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
+    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API...');
     try {
       this.marketHubData.news = (
         await this.finnhubClient.marketNews('general')
@@ -168,7 +139,7 @@ class MarketHubService {
       return;
     }
     try {
-      this.deskthing.sendLog('Updating settings');
+      this.deskthing.sendLog('Updating settings...');
       this.apiKey = (data.settings.apiKey.value as string) || undefined;
       this.refreshInterval =
         (data.settings.refreshInterval.value as number) || 5;
@@ -242,6 +213,8 @@ class MarketHubService {
 
         return stockData;
       }
+
+      this.deskthing.sendError('Invalid stock code: ' + stockCode);
 
       return undefined;
     } catch (error) {

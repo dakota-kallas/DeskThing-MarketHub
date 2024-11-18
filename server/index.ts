@@ -23,7 +23,18 @@ const start = async () => {
   if (
     !Data?.settings?.stockCode1 ||
     !Data?.settings?.stockCode2 ||
-    !Data?.settings?.stockCode3
+    !Data?.settings?.stockCode3 ||
+    !Data?.settings?.stockCode4 ||
+    !Data?.settings?.stockCode5 ||
+    !Data?.settings?.stockCode6 ||
+    !Data?.settings?.stockCode7 ||
+    !Data?.settings?.stockCode8 ||
+    !Data?.settings?.stockCode9 ||
+    !Data?.settings?.stockCode10 ||
+    !Data?.settings?.stockCode11 ||
+    !Data?.settings?.stockCode12 ||
+    !Data?.settings?.apiKey ||
+    !Data?.settings?.refreshInterval
   ) {
     setupSettings();
   }
@@ -51,93 +62,106 @@ const start = async () => {
 };
 
 const setupSettings = async () => {
-  const stockCode1Setting = {
+  const stockCode1Setting: SettingsString = {
     label: 'Stock Code #1',
     description: 'The 1st stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode2Setting = {
+  const stockCode2Setting: SettingsString = {
     label: 'Stock Code #2',
     description: 'The 2nd stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode3Setting = {
+  const stockCode3Setting: SettingsString = {
     label: 'Stock Code #3',
     description: 'The 3rd stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode4Setting = {
+  const stockCode4Setting: SettingsString = {
     label: 'Stock Code #4',
     description: 'The 4th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode5Setting = {
+  const stockCode5Setting: SettingsString = {
     label: 'Stock Code #5',
     description: 'The 5th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode6Setting = {
+  const stockCode6Setting: SettingsString = {
     label: 'Stock Code #6',
     description: 'The 6th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode7Setting = {
+  const stockCode7Setting: SettingsString = {
     label: 'Stock Code #7',
     description: 'The 7th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode8Setting = {
+  const stockCode8Setting: SettingsString = {
     label: 'Stock Code #8',
     description: 'The 8th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode9Setting = {
+  const stockCode9Setting: SettingsString = {
     label: 'Stock Code #9',
     description: 'The 9th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode10Setting = {
+  const stockCode10Setting: SettingsString = {
     label: 'Stock Code #10',
     description: 'The 10th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode11Setting = {
+  const stockCode11Setting: SettingsString = {
     label: 'Stock Code #11',
     description: 'The 11th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const stockCode12Setting = {
+  const stockCode12Setting: SettingsString = {
     label: 'Stock Code #12',
     description: 'The 12th stock code you want to track.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const apiKeySetting = {
-    label: 'FinnHhub API Key',
+  const apiKeySetting: SettingsString = {
+    label: 'Finnhub API Key',
     description:
       'The (free) API Key you get from signing up at https://finnhub.io/dashboard.',
+    value: '',
     type: 'string',
-  } as SettingsString;
+  };
 
-  const refreshIntervalSetting = {
+  const refreshIntervalSetting: SettingsNumber = {
     label: 'Refresh Interval (minutes)',
     description: 'The amount of minutes between each refresh.',
     type: 'number',
     value: 5,
     max: 60,
     min: 1,
-  } as SettingsNumber;
+  };
 
   DeskThing.addSettings({
     apiKey: apiKeySetting,

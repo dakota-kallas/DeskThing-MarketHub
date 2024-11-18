@@ -22,12 +22,12 @@ Make sure you have the following installed:
 
 ### Setup
 
-Current as of DeskThing v0.9.2
+Current as of DeskThing v0.9.3
 
 1. Download the latest release build
 2. Navigate to the `Downloads > App` tab and click on `Upload App`
    - <img src="https://github.com/user-attachments/assets/7da9db21-64c5-4c55-898a-de97b9e6f1c1" height="300" />
-3. Select the `build.zip` file that was downloaded
+3. Select the `markethub-app-v{version number}.zip` file that was downloaded
 4. Navigate to the `Settings` of `Market Hub`
 5. Enter your desired configuration
    - Enter your [Finnhub API](https://finnhub.io/dashboard) Key
@@ -75,5 +75,6 @@ The app integrates with the [Finnhub API](https://finnhub.io/docs/api), using th
 Create a pull request and described the added / modified functionality.
 
 ## Additional Screenshots
+
 <img src="https://github.com/user-attachments/assets/0d4553fa-fe64-4495-aa73-e149feb084c0" height="400" />
 <img src="https://github.com/user-attachments/assets/f08e0fd1-3b83-4370-926d-795daa384d37" height="400" />
