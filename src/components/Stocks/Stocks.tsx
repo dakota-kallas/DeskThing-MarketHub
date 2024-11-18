@@ -41,11 +41,6 @@ const Stocks = ({ marketHubData }: StocksProps) => {
     case 3:
       size = StockDisplaySize.Large;
       break;
-    case 4:
-    case 5:
-    case 6:
-      size = StockDisplaySize.Small;
-      break;
     default:
       size = StockDisplaySize.Small;
       break;
