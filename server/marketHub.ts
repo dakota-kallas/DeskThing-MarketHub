@@ -40,7 +40,7 @@ class MarketHubService {
   }
 
   private async updateMarketHub() {
-    this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API.`);
+    this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API...`);
     this.marketHubData = {} as MarketHubData;
     this.finnhubClient = new DefaultApi({
       apiKey: this.apiKey,
@@ -63,7 +63,7 @@ class MarketHubService {
       }
     }
 
-    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API.');
+    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API...');
     try {
       this.marketHubData.news = (
         await this.finnhubClient.marketNews('general')
@@ -139,7 +139,7 @@ class MarketHubService {
       return;
     }
     try {
-      this.deskthing.sendLog('Updating settings');
+      this.deskthing.sendLog('Updating settings...');
       this.apiKey = (data.settings.apiKey.value as string) || undefined;
       this.refreshInterval =
         (data.settings.refreshInterval.value as number) || 5;
