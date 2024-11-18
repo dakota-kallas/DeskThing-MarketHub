@@ -53,9 +53,12 @@ const Stocks = ({ marketHubData }: StocksProps) => {
 
   const stocksContainerClasses = `stocksContainer stocksContainer--${size}`;
 
-  const message = marketHubData
-    ? 'No Stock Data Available'
-    : 'API Not Configured';
+  console.log('marketHubData', marketHubData);
+
+  const message =
+    marketHubData && marketHubData.lastUpdated
+      ? 'No Stock Data Available'
+      : 'API Not Configured';
 
   return (
     <div className='contentContainer' ref={contentContainerRef}>
