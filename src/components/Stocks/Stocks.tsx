@@ -67,16 +67,16 @@ const Stocks = ({ marketHubData }: StocksProps) => {
           <p className='info--description'>Double-check Configuration</p>
         </div>
       )}
-      {isTallEnough && marketHubData?.news && marketHubData.news.length > 0 ? (
-        <News newsData={marketHubData.news[0]} />
-      ) : (
-        <></>
-      )}
-      {isTallEnough && marketHubData?.news && marketHubData.news.length > 1 ? (
-        <News newsData={marketHubData.news[1]} />
-      ) : (
-        <></>
-      )}
+      {(isTallEnough || (!isTallEnough && marketHubData?.count == 0)) &&
+        marketHubData?.news &&
+        marketHubData.news.length > 0 && (
+          <News newsData={marketHubData.news[0]} />
+        )}
+      {(isTallEnough || (!isTallEnough && marketHubData?.count == 0)) &&
+        marketHubData?.news &&
+        marketHubData.news.length > 1 && (
+          <News newsData={marketHubData.news[1]} />
+        )}
     </div>
   );
 
