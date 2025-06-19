@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react'
 import { StockData } from '../../stores/marketHubStore';
 import './stock.css';
+import { DeskThing } from '@deskthing/client'
 
 interface StockProps {
   stockData: StockData | null;
@@ -13,6 +15,15 @@ export enum StockDisplaySize {
 }
 
 const Stock = ({ stockData, size }: StockProps) => {
+  const [logo, setLogo] = useState<string | undefined>(undefined)
+  
+  useEffect(() => {
+    if (stockData?.logo) {
+      const logo = DeskThing.useProxy(stockData.logo);
+      setLogo(logo);
+    }
+  }, [stockData?.logo]);
+  
   const changeClass =
     stockData && stockData.change > 0 ? 'text-green-500' : 'text-red-500';
   const percentChangeClass =
@@ -28,10 +39,10 @@ const Stock = ({ stockData, size }: StockProps) => {
         <div>
           <div className='stock--display'>
             <p className='stock--code'>{stockData?.code}</p>
-            {stockData?.logo ? (
+            {logo ? (
               <img
                 className='stock--logo'
-                src={stockData?.logo}
+                src={logo}
                 alt={stockData?.code}
               />
             ) : (

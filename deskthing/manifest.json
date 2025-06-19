@@ -1,17 +1,17 @@
 {
   "id": "markethub",
-  "isAudioSource": false,
-  "isScreenSaver": false,
   "isWebApp": true,
-  "isLocalApp": false,
   "requires": [],
   "label": "Market Hub",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "version_code": "1.1",
-  "compatible_server": ["9"],
-  "compatible_client": ["9"],
+  "compatible_server": ["11"],
+  "compatible_client": ["11"],
   "description": "The Market Hub app offers a quick-access, at-a-glance view of selected stocks. Free API Key required (https://finnhub.io/dashboard).",
   "author": "Dakota Kallas",
   "platforms": ["linux", "windows", "mac"],
-  "repository": "https://github.com/dakota-kallas/DeskThing-MarketHub"
+  "homepage": "https://github.com/dakota-kallas/DeskThing-MarketHub",
+  "repository": "https://github.com/dakota-kallas/DeskThing-MarketHub",
+  "tags": [false, false],
+  "requiredVersions": { "server": ">=0.11.0", "client": ">=0.11.0" }
 }

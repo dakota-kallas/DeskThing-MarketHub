@@ -1,5 +1,5 @@
-import { DeskThing } from 'deskthing-client';
-import { SocketData } from 'deskthing-server';
+import { DeskThing } from '@deskthing/client';
+import { SocketData } from '@deskthing/types';
 import { MarketNews } from 'finnhub-ts';
 
 export type MarketHubData = {
@@ -119,12 +119,10 @@ type MarketHubListener = (marketHubData: MarketHubData | null) => void;
 export class MarketHubStore {
   private static instance: MarketHubStore | null = null;
   private marketHubData: MarketHubData | null = null;
-  private deskThing: DeskThing;
   private listeners: MarketHubListener[] = [];
 
   constructor() {
-    this.deskThing = DeskThing.getInstance();
-    this.deskThing.on('markethub', (data: SocketData) => {
+    DeskThing.on('markethub_data', (data: SocketData) => {
       this.marketHubData = data.payload as MarketHubData;
       this.notifyListeners();
     });
@@ -156,7 +154,7 @@ export class MarketHubStore {
     if (!this.marketHubData) {
       this.getMarketHubData();
     }
-    this.deskThing.sendMessageToParent({
+    DeskThing.send({
       app: 'client',
       type: 'log',
       payload: 'Getting Market Hub data',
@@ -164,7 +162,7 @@ export class MarketHubStore {
     this.listeners.forEach((listener) => listener(this.marketHubData));
   }
   async requestMarketHubData(): Promise<void> {
-    this.deskThing.sendMessageToParent({
+    DeskThing.send({
       type: 'get',
       request: 'markethub_data',
     });
