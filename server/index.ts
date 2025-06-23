@@ -1,185 +1,156 @@
 import {
-  DeskThing as DK,
-  SettingsNumber,
-  SettingsString,
+  AppSettings,
+  DESKTHING_EVENTS,
+  SETTING_TYPES,
   SocketData,
-} from 'deskthing-server';
-const DeskThing = DK.getInstance();
-export { DeskThing }; // Required export of this exact name for the server to connect
-import MarketHubService from './marketHub';
+} from "@deskthing/types";
+import { DeskThing } from "@deskthing/server";
+// Required export of this exact name for the server to connect
+import MarketHubService from "./marketHub";
 
 const start = async () => {
   const marketHub = MarketHubService.getInstance();
-  let Data = await DeskThing.getData();
-  DeskThing.on('data', (newData) => {
+  let Data = await DeskThing.getSettings();
+  DeskThing.on(DESKTHING_EVENTS.SETTINGS, (newData) => {
     // Syncs the data with the server
-    Data = newData;
+    Data = newData.payload;
     if (Data) {
       marketHub.updateData(Data);
     }
   });
 
   // This is how to add settings (implementation may vary)
-  if (
-    !Data?.settings?.stockCode1 ||
-    !Data?.settings?.stockCode2 ||
-    !Data?.settings?.stockCode3 ||
-    !Data?.settings?.stockCode4 ||
-    !Data?.settings?.stockCode5 ||
-    !Data?.settings?.stockCode6 ||
-    !Data?.settings?.stockCode7 ||
-    !Data?.settings?.stockCode8 ||
-    !Data?.settings?.stockCode9 ||
-    !Data?.settings?.stockCode10 ||
-    !Data?.settings?.stockCode11 ||
-    !Data?.settings?.stockCode12 ||
-    !Data?.settings?.apiKey ||
-    !Data?.settings?.refreshInterval
-  ) {
-    setupSettings();
-  }
+  setupSettings();
 
   const handleGet = async (request: SocketData) => {
-    if (request.request === 'markethub_data') {
-      DeskThing.sendLog('Getting Market Hub data');
+    if (request.request === "markethub_data") {
+      console.log("Getting Market Hub data");
       const marketData = await marketHub.getMarketHub();
       if (marketData) {
-        DeskThing.sendDataToClient({
-          type: 'markethub_data',
+        DeskThing.send({
+          type: "markethub_data",
           payload: marketData,
         });
       } else {
-        console.warn('Error getting Market Hub data');
+        console.warn("Error getting Market Hub data");
       }
     }
   };
 
-  DeskThing.on('get', handleGet);
+  DeskThing.on("get", handleGet);
   const stop = async () => {
     marketHub.stop();
   };
-  DeskThing.on('stop', stop);
+  DeskThing.on("stop", stop);
 };
 
 const setupSettings = async () => {
-  const stockCode1Setting: SettingsString = {
-    label: 'Stock Code #1',
-    description: 'The 1st stock code you want to track.',
-    value: '',
-    type: 'string',
+  const appSettings: AppSettings = {
+    refreshInterval: {
+      id: "refreshInterval",
+      label: "Refresh Interval (minutes)",
+      description: "The amount of minutes between each refresh.",
+      type: SETTING_TYPES.NUMBER,
+      value: 5,
+      max: 60,
+      min: 1,
+    },
+    apiKey: {
+      id: "apiKey",
+      label: "Finnhub API Key",
+      description:
+        "The (free) API Key you get from signing up at https://finnhub.io/dashboard.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode1: {
+      id: "stockCode1",
+      label: "Stock Code #1",
+      description: "The 1st stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode2: {
+      id: "stockCode2",
+      label: "Stock Code #2",
+      description: "The 2nd stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode3: {
+      id: "stockCode3",
+      label: "Stock Code #3",
+      description: "The 3rd stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode4: {
+      id: "stockCode4",
+      label: "Stock Code #4",
+      description: "The 4th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode5: {
+      id: "stockCode5",
+      label: "Stock Code #5",
+      description: "The 5th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode6: {
+      id: "stockCode6",
+      label: "Stock Code #6",
+      description: "The 6th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode7: {
+      id: "stockCode7",
+      label: "Stock Code #7",
+      description: "The 7th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode8: {
+      id: "stockCode8",
+      label: "Stock Code #8",
+      description: "The 8th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode9: {
+      id: "stockCode9",
+      label: "Stock Code #9",
+      description: "The 9th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode10: {
+      id: "stockCode10",
+      label: "Stock Code #10",
+      description: "The 10th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode11: {
+      id: "stockCode11",
+      label: "Stock Code #11",
+      description: "The 11th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
+    stockCode12: {
+      id: "stockCode12",
+      label: "Stock Code #12",
+      description: "The 12th stock code you want to track.",
+      value: "",
+      type: SETTING_TYPES.STRING,
+    },
   };
 
-  const stockCode2Setting: SettingsString = {
-    label: 'Stock Code #2',
-    description: 'The 2nd stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode3Setting: SettingsString = {
-    label: 'Stock Code #3',
-    description: 'The 3rd stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode4Setting: SettingsString = {
-    label: 'Stock Code #4',
-    description: 'The 4th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode5Setting: SettingsString = {
-    label: 'Stock Code #5',
-    description: 'The 5th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode6Setting: SettingsString = {
-    label: 'Stock Code #6',
-    description: 'The 6th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode7Setting: SettingsString = {
-    label: 'Stock Code #7',
-    description: 'The 7th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode8Setting: SettingsString = {
-    label: 'Stock Code #8',
-    description: 'The 8th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode9Setting: SettingsString = {
-    label: 'Stock Code #9',
-    description: 'The 9th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode10Setting: SettingsString = {
-    label: 'Stock Code #10',
-    description: 'The 10th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode11Setting: SettingsString = {
-    label: 'Stock Code #11',
-    description: 'The 11th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const stockCode12Setting: SettingsString = {
-    label: 'Stock Code #12',
-    description: 'The 12th stock code you want to track.',
-    value: '',
-    type: 'string',
-  };
-
-  const apiKeySetting: SettingsString = {
-    label: 'Finnhub API Key',
-    description:
-      'The (free) API Key you get from signing up at https://finnhub.io/dashboard.',
-    value: '',
-    type: 'string',
-  };
-
-  const refreshIntervalSetting: SettingsNumber = {
-    label: 'Refresh Interval (minutes)',
-    description: 'The amount of minutes between each refresh.',
-    type: 'number',
-    value: 5,
-    max: 60,
-    min: 1,
-  };
-
-  DeskThing.addSettings({
-    apiKey: apiKeySetting,
-    refreshInterval: refreshIntervalSetting,
-    stockCode1: stockCode1Setting,
-    stockCode2: stockCode2Setting,
-    stockCode3: stockCode3Setting,
-    stockCode4: stockCode4Setting,
-    stockCode5: stockCode5Setting,
-    stockCode6: stockCode6Setting,
-    stockCode7: stockCode7Setting,
-    stockCode8: stockCode8Setting,
-    stockCode9: stockCode9Setting,
-    stockCode10: stockCode10Setting,
-    stockCode11: stockCode11Setting,
-    stockCode12: stockCode12Setting,
-  });
+  DeskThing.initSettings(appSettings);
 };
 
 // Main Entrypoint of the server
-DeskThing.on('start', start);
+DeskThing.on("start", start);

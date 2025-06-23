@@ -1,14 +1,13 @@
 import { DefaultApi } from 'finnhub-ts';
-import { DeskThing } from './index';
-import { DataInterface } from 'deskthing-server';
 import { MarketHubData, StockData } from '../src/stores/marketHubStore';
+import { DeskThing } from '@deskthing/server';
+import { AppSettings } from '@deskthing/types'
 
 class MarketHubService {
   private marketHubData: MarketHubData;
   private finnhubClient: DefaultApi;
   private lastUpdateTime: Date | null;
   private updateTaskId: (() => void) | null = null;
-  private deskthing: typeof DeskThing;
   private static instance: MarketHubService | null = null;
   private stockCode1: string = '';
   private stockCode2: string = '';
@@ -27,7 +26,6 @@ class MarketHubService {
   private count = 0;
 
   constructor() {
-    this.deskthing = DeskThing;
     this.updateMarketHub();
     this.scheduleIntervalUpdates();
   }
@@ -40,7 +38,7 @@ class MarketHubService {
   }
 
   private async updateMarketHub() {
-    this.deskthing.sendLog(`Fetching Market Hub data from Finnhub API...`);
+    console.log(`Fetching Market Hub data from Finnhub API...`);
     this.marketHubData = {} as MarketHubData;
     this.finnhubClient = new DefaultApi({
       apiKey: this.apiKey,
@@ -63,7 +61,7 @@ class MarketHubService {
       }
     }
 
-    this.deskthing.sendLog('Fetching Market Hub News data from Finnhub API...');
+    console.log('Fetching Market Hub News data from Finnhub API...');
     try {
       this.marketHubData.news = (
         await this.finnhubClient.marketNews('general')
@@ -96,7 +94,7 @@ class MarketHubService {
         message += ' Invalid API key or unauthorized request.';
       }
       console.error(message);
-      this.deskthing.sendError(message);
+      console.error(message);
       this.marketHubData.news = [];
       return undefined;
     }
@@ -111,8 +109,8 @@ class MarketHubService {
     this.marketHubData.lastUpdated = timeString;
     this.marketHubData.count = this.count;
 
-    this.deskthing.sendLog(`Market Hub updated`);
-    this.deskthing.sendDataToClient({
+    console.log(`Market Hub updated`);
+    DeskThing.send({
       type: 'markethub_data',
       payload: this.marketHubData,
     });
@@ -133,29 +131,29 @@ class MarketHubService {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  public updateData(data: DataInterface) {
-    if (!data.settings) {
-      this.deskthing.sendLog('No settings defined');
+  public updateData(data: AppSettings) {
+    if (!data) {
+      console.log('No settings defined');
       return;
     }
     try {
-      this.deskthing.sendLog('Updating settings...');
-      this.apiKey = (data.settings.apiKey.value as string) || undefined;
+      console.log('Updating settings...');
+      this.apiKey = (data.apiKey.value as string) || undefined;
       this.refreshInterval =
-        (data.settings.refreshInterval.value as number) || 5;
-      this.stockCode1 = (data.settings.stockCode1.value as string) || '';
-      this.stockCode2 = (data.settings.stockCode2.value as string) || '';
-      this.stockCode3 = (data.settings.stockCode3.value as string) || '';
-      this.stockCode4 = (data.settings.stockCode4.value as string) || '';
-      this.stockCode5 = (data.settings.stockCode5.value as string) || '';
-      this.stockCode6 = (data.settings.stockCode6.value as string) || '';
-      this.stockCode7 = (data.settings.stockCode7.value as string) || '';
-      this.stockCode8 = (data.settings.stockCode8.value as string) || '';
-      this.stockCode9 = (data.settings.stockCode9.value as string) || '';
-      this.stockCode10 = (data.settings.stockCode10.value as string) || '';
-      this.stockCode11 = (data.settings.stockCode11.value as string) || '';
-      this.stockCode12 = (data.settings.stockCode12.value as string) || '';
-      this.deskthing.sendLog(`Setting up Finnhub API client: ${this.apiKey}`);
+        (data.refreshInterval.value as number) || 5;
+      this.stockCode1 = (data.stockCode1.value as string) || '';
+      this.stockCode2 = (data.stockCode2.value as string) || '';
+      this.stockCode3 = (data.stockCode3.value as string) || '';
+      this.stockCode4 = (data.stockCode4.value as string) || '';
+      this.stockCode5 = (data.stockCode5.value as string) || '';
+      this.stockCode6 = (data.stockCode6.value as string) || '';
+      this.stockCode7 = (data.stockCode7.value as string) || '';
+      this.stockCode8 = (data.stockCode8.value as string) || '';
+      this.stockCode9 = (data.stockCode9.value as string) || '';
+      this.stockCode10 = (data.stockCode10.value as string) || '';
+      this.stockCode11 = (data.stockCode11.value as string) || '';
+      this.stockCode12 = (data.stockCode12.value as string) || '';
+      console.log(`Setting up Finnhub API client: ${this.apiKey}`);
       this.finnhubClient = new DefaultApi({
         apiKey: this.apiKey,
         isJsonMime: (input) => {
@@ -168,7 +166,7 @@ class MarketHubService {
       });
       this.updateMarketHub();
     } catch (error) {
-      this.deskthing.sendLog('Error updating Market Hub data: ' + error);
+      console.log('Error updating Market Hub data: ' + error);
     }
   }
 
@@ -183,7 +181,7 @@ class MarketHubService {
       // Ensure the stock code exists and matches the one set by the user
       if (profileResponse.data && profileResponse.data.ticker) {
         const response = await this.finnhubClient.quote(stockCode);
-        this.deskthing.sendLog(
+        console.log(
           `Market Hub data received from Finnhub API for ${stockCode}.`
         );
 
@@ -193,7 +191,7 @@ class MarketHubService {
             : response.data.d;
 
         const logo = profileResponse.data.logo
-          ? await DeskThing.encodeImageFromUrl(profileResponse.data.logo)
+          ? profileResponse.data.logo
           : undefined;
 
         const stockData = {
@@ -214,7 +212,7 @@ class MarketHubService {
         return stockData;
       }
 
-      this.deskthing.sendError('Invalid stock code: ' + stockCode);
+      console.error('Invalid stock code: ' + stockCode);
 
       return undefined;
     } catch (error) {
@@ -224,7 +222,7 @@ class MarketHubService {
         message += ' Invalid API key or unauthorized request.';
       }
       console.error(message);
-      this.deskthing.sendError(message);
+      console.error(error);
       return undefined;
     }
   }
@@ -239,10 +237,10 @@ class MarketHubService {
       !this.lastUpdateTime ||
       new Date().getTime() - this.lastUpdateTime.getTime() > 15 * 60 * 1000
     ) {
-      DeskThing.sendLog('Fetching Market Hub data...');
+      console.log('Fetching Market Hub data...');
       await this.updateMarketHub();
     }
-    DeskThing.sendLog('Returning Market Hub data');
+    console.log('Returning Market Hub data');
     return this.marketHubData;
   }
 }
